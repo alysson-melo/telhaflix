@@ -1,9 +1,5 @@
 @charset "UTF-8";
 
-/* Anotações:
--adicionar a pagina detalhes na home para utilizar bootstrap
-*/
-
 @keyframes opacidade {
     0% {
         opacity: 0;
@@ -520,6 +516,10 @@ p {
 
 .cartaz:hover .img-cartaz {
     opacity: 0.5;
+}
+
+.film-title {
+    margin-right: 50px;
 }
 
 .container-video {
