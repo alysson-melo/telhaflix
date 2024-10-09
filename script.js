@@ -383,7 +383,7 @@ if (banner) {
 // API
 // ---------------------
 
-const containerGradeFilmes = document.querySelector('.container-grade-filmes')
+const containerGradeFilmes = document.querySelector('#container-grade-filmes')
 
 if (containerGradeFilmes) {
     const urlApi = 'https://api.themoviedb.org/3/'
