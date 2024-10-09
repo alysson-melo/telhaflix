@@ -383,9 +383,9 @@ if (banner) {
 // API
 // ---------------------
 
-const containerGrade = document.querySelector('.container-grade')
+const containerGradeFilmes = document.querySelector('.container-grade-filmes')
 
-if (containerGrade) {
+if (containerGradeFilmes) {
     const urlApi = 'https://api.themoviedb.org/3/'
     const apiKey = '062d176f3e0565c0e81c67fb76be2bb9'
     const ptBr = '&language=pt-BR'
