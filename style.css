@@ -102,6 +102,22 @@ h3 {
     line-height: normal;
 }
 
+h4 {
+    color: var(--White);
+    font-family: "Andika", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1.5rem;
+}
+
+h5 {
+    color: var(--White);
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1.3rem;
+}
+
 /* STYLING */
 
 body {
@@ -562,6 +578,67 @@ p {
     bottom: -70px;
 }
 
+.container-detalhes {
+    display: flex;
+    align-items: center;
+    margin-left: calc(100px - 6.5vw);
+    padding-top: calc(81px + 70px);
+    max-width: 917px;
+}
+
+.infos {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-left: 26px;
+}
+
+.img-detalhes {
+    width: 235px;
+    height: 354px;
+    border-radius: 13px;
+}
+
+.data-nota {
+    display: flex;
+}
+
+.txt-data-nota {
+    display: flex;
+    gap: 18px;
+}
+
+#estrelas {
+    display: flex;
+    gap: 5px;
+    margin-left: 5px;
+    align-items: center;
+}
+
+.estrela {
+    color: var(--White);
+    font-size: 1.1rem;
+}
+
+.container-iframe {
+    padding: 80px 0;
+    display: flex;
+    justify-content: center;
+}
+
+#iframe {
+    width: 100%;
+    max-width: 800px;
+    aspect-ratio: 16 / 9;
+    border-radius: 25px;
+}
+
+#container_geral {
+    width: 85vw;
+    margin: 0 auto;
+}
+
+
 /* Typical Device Breakpoints
 
 Mobile devices – 320px — 480px.
@@ -657,6 +734,46 @@ Extra large screens, TV – 1201px, and more. */
         width: 80vw;
     }
 
+    .container-detalhes {
+        display: flex;
+        flex-direction: column;
+        margin-left: 0px;
+        justify-content: center;
+        align-items: center;
+        padding-top: calc(81px + 60px);
+    }
+
+    .infos {
+        margin-left: 0px;
+        gap: 20px;
+        position: relative;
+        top: -11px;
+    }
+
+    .img-detalhes {
+        position: relative;
+        top: 40px;
+        /* margin-bottom: 50px;  */
+    }
+
+    #tittle_detalhes {
+        text-align: center;
+        position: relative;
+        top: -380px;
+    }
+
+    .data-nota {
+        justify-content: center;
+        align-items: center;
+    }
+
+    #sinopse {
+        text-align: center;
+    }
+
+    #iframe {
+        max-width: 550px;
+    }
 }
 
 @media screen and (max-width: 400px) {
