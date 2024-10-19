@@ -384,67 +384,206 @@ if (banner) {
 // ---------------------
 
 const containerGradeFilmes = document.querySelector('#container-grade-filmes')
+const containerGradeIndicacoes = document.querySelector('#container-grade-indicacoes')
+const containerGradeSeries = document.querySelector('#container-grade-series')
+
+const urlApi = 'https://api.themoviedb.org/3/'
+const apiKey = '062d176f3e0565c0e81c67fb76be2bb9'
+const ptBr = '&language=pt-BR'
+let obj = {}
+let objTitle = ''
+let objNota = ''
+let objPP = ''
+let imgUrl = ''
 
 if (containerGradeFilmes) {
-    const urlApi = 'https://api.themoviedb.org/3/'
-    const apiKey = '062d176f3e0565c0e81c67fb76be2bb9'
-    const ptBr = '&language=pt-BR'
-    let obj = {}
-    let objTitle = ''
-    let objNota = ''
-    let objPP = ''
-    let imgUrl = ''
-
-    async function chamarAPI() {
+    async function chamarFilmesAPI() {
         try {
-            fetch(`${urlApi}movie/popular?api_key=${apiKey}${ptBr}`)
-                .then(response => response.json())
-                .then(data => {
-                    obj = data
-                    for (let i = 0; i < 15; i++) {
-                        objTitle = obj.results[i].title
-                        objNota = obj.results[i].vote_average.toFixed(1)
-                        objPP = obj.results[i].poster_path
-                        imgUrl = `https://image.tmdb.org/t/p/w500${objPP}`
+            for (let a = 1; a <= 2; a++) {
+                fetch(`${urlApi}movie/popular?api_key=${apiKey}${ptBr}&page=${a}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        obj = data
+                        for (let i = 0; i < 20; i++) {
+                            objTitle = obj.results[i].title
+                            objNota = obj.results[i].vote_average.toFixed(1)
+                            objPP = obj.results[i].poster_path
+                            imgUrl = `https://image.tmdb.org/t/p/w500${objPP}`
 
-                        function criarEstrutura() {
+                            function criarEstrutura() {
 
-                            const htmlCartaz = document.createElement('div')
-                            htmlCartaz.className = 'cartaz'
+                                const htmlCartaz = document.createElement('div')
+                                htmlCartaz.className = 'cartaz'
 
-                            const htmlImg = document.createElement('img')
-                            htmlImg.className = 'img-cartaz'
-                            htmlImg.src = imgUrl
-                            htmlCartaz.appendChild(htmlImg)
+                                const a = document.createElement('a')
+                                htmlCartaz.appendChild(a)
+                                a.href = 'detalhes.html'
 
-                            const htmlDetalhesCartaz = document.createElement('div')
-                            htmlDetalhesCartaz.className = 'detalhes-cartaz'
-                            htmlCartaz.appendChild(htmlDetalhesCartaz)
+                                const htmlImg = document.createElement('img')
+                                htmlImg.className = 'img-cartaz'
+                                htmlImg.src = imgUrl
+                                a.appendChild(htmlImg)
 
-                            const htmlTitle = document.createElement('h2')
-                            htmlTitle.className = 'film-title'
-                            if (objTitle.length > 32) {
-                                htmlTitle.textContent = `${objTitle.slice(0, 30)}...`
-                            } else {
-                                htmlTitle.textContent = objTitle
+                                const htmlDetalhesCartaz = document.createElement('div')
+                                htmlDetalhesCartaz.className = 'detalhes-cartaz'
+                                a.appendChild(htmlDetalhesCartaz)
+
+                                const htmlTitle = document.createElement('h2')
+                                htmlTitle.className = 'film-title'
+                                if (objTitle.length > 32) {
+                                    htmlTitle.textContent = `${objTitle.slice(0, 30)}...`
+                                } else {
+                                    htmlTitle.textContent = objTitle
+                                }
+                                htmlDetalhesCartaz.appendChild(htmlTitle)
+
+                                const htmlNota = document.createElement('h2')
+                                htmlNota.className = 'film-nota'
+                                htmlNota.textContent = `${objNota}/10`
+                                htmlDetalhesCartaz.appendChild(htmlNota)
+
+                                const containerCartazes = document.querySelector('.container-cartazes')
+                                containerCartazes.appendChild(htmlCartaz)
                             }
-                            htmlDetalhesCartaz.appendChild(htmlTitle)
-
-                            const htmlNota = document.createElement('h2')
-                            htmlNota.className = 'film-nota'
-                            htmlNota.textContent = `${objNota}/10`
-                            htmlDetalhesCartaz.appendChild(htmlNota)
-
-                            const containerCartazes = document.querySelector('.container-cartazes')
-                            containerCartazes.appendChild(htmlCartaz)
+                            criarEstrutura()
                         }
-                        criarEstrutura()
-                    }
-                })
+                    })
+            }
         }
         catch (error) {
             console.error('Erro ao chamar a API: ', error)
         }
     }
-    chamarAPI()
+    chamarFilmesAPI()
+}
+
+if (containerGradeSeries) {
+    let contagemSeries = 0
+    let limiteContagemSeries = 3
+
+    async function chamarSeriesAPI() {
+        try {
+            for (let a = 1; a <= limiteContagemSeries; a++) {
+                if (contagemSeries >= 20 && contagemSeries < 40) {
+                    limiteContagemSeries++
+                }
+                await fetch(`${urlApi}tv/popular?api_key=${apiKey}${ptBr}&page=${a + 6}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        obj = data
+                        for (let i = 0; i < 20; i++) {
+                            if (obj.results[i].original_language == 'en') {
+                                objTitle = obj.results[i].name
+                                objNota = obj.results[i].vote_average.toFixed(1)
+                                objPP = obj.results[i].poster_path
+                                imgUrl = `https://image.tmdb.org/t/p/w500${objPP}`
+                                contagemSeries++
+
+                                function criarEstrutura() {
+
+                                    const htmlCartaz = document.createElement('div')
+                                    htmlCartaz.className = 'cartaz'
+
+                                    const a = document.createElement('a')
+                                    htmlCartaz.appendChild(a)
+                                    a.href = 'detalhes.html'
+
+                                    const htmlImg = document.createElement('img')
+                                    htmlImg.className = 'img-cartaz'
+                                    htmlImg.src = imgUrl
+                                    a.appendChild(htmlImg)
+
+                                    const htmlDetalhesCartaz = document.createElement('div')
+                                    htmlDetalhesCartaz.className = 'detalhes-cartaz'
+                                    a.appendChild(htmlDetalhesCartaz)
+
+                                    const htmlTitle = document.createElement('h2')
+                                    htmlTitle.className = 'film-title'
+                                    if (objTitle.length > 32) {
+                                        htmlTitle.textContent = `${objTitle.slice(0, 30)}...`
+                                    } else {
+                                        htmlTitle.textContent = objTitle
+                                    }
+                                    htmlDetalhesCartaz.appendChild(htmlTitle)
+
+                                    const htmlNota = document.createElement('h2')
+                                    htmlNota.className = 'film-nota'
+                                    htmlNota.textContent = `${objNota}/10`
+                                    htmlDetalhesCartaz.appendChild(htmlNota)
+
+                                    const containerCartazes = document.querySelector('.container-cartazes')
+                                    containerCartazes.appendChild(htmlCartaz)
+                                }
+                                criarEstrutura()
+                            }
+                        }
+                    })
+            }
+        }
+        catch (error) {
+            console.error('Erro ao chamar a API: ', error)
+        }
+    }
+    chamarSeriesAPI()
+}
+
+if (containerGradeIndicacoes) {
+    async function chamarindicacoesAPI() {
+        try {
+            for (let a = 1; a <= 2; a++) {
+                await fetch(`${urlApi}movie/top_rated?api_key=${apiKey}${ptBr}&page=${a}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        obj = data
+                        for (let i = 0; i < 20; i++) {
+                            objTitle = obj.results[i].title
+                            objNota = obj.results[i].vote_average.toFixed(1)
+                            objPP = obj.results[i].poster_path
+                            imgUrl = `https://image.tmdb.org/t/p/w500${objPP}`
+
+                            function criarEstrutura() {
+
+                                const htmlCartaz = document.createElement('div')
+                                htmlCartaz.className = 'cartaz'
+
+                                const a = document.createElement('a')
+                                htmlCartaz.appendChild(a)
+                                a.href = 'detalhes.html'
+
+                                const htmlImg = document.createElement('img')
+                                htmlImg.className = 'img-cartaz'
+                                htmlImg.src = imgUrl
+                                a.appendChild(htmlImg)
+
+                                const htmlDetalhesCartaz = document.createElement('div')
+                                htmlDetalhesCartaz.className = 'detalhes-cartaz'
+                                a.appendChild(htmlDetalhesCartaz)
+
+                                const htmlTitle = document.createElement('h2')
+                                htmlTitle.className = 'film-title'
+                                if (objTitle.length > 32) {
+                                    htmlTitle.textContent = `${objTitle.slice(0, 30)}...`
+                                } else {
+                                    htmlTitle.textContent = objTitle
+                                }
+                                htmlDetalhesCartaz.appendChild(htmlTitle)
+
+                                const htmlNota = document.createElement('h2')
+                                htmlNota.className = 'film-nota'
+                                htmlNota.textContent = `${objNota}/10`
+                                htmlDetalhesCartaz.appendChild(htmlNota)
+
+                                const containerCartazes = document.querySelector('.container-cartazes')
+                                containerCartazes.appendChild(htmlCartaz)
+                            }
+                            criarEstrutura()
+                        }
+                    })
+            }
+        }
+        catch (error) {
+            console.error('Erro ao chamar a API: ', error)
+        }
+    }
+    chamarindicacoesAPI()
 }
