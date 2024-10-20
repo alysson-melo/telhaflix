@@ -53,22 +53,22 @@
         </nav>
     </header>
 
+    <div class="screen-load">
+        <div class="spinner-border text-danger carregamento"> </div>
+    </div>
+
     <main id="container_geral">
         <div class="container-detalhes">
-            <img src="imgs/series/la_casa_de_papel.jpg" class="img-detalhes">
+            <img src="imgs/series/la_casa_de_papel.jpg" id="img_detalhes">
             <div class="infos">
                 <h1 id="tittle_detalhes">La casa de papel</h1>
-                <div class="data-nota">
-                    <div class="txt-data-nota">
-                        <h4>2024</h4>
-                        <h4>8.7</h4>
+                <div class="container-data-nota">
+                    <div class="data-nota">
+                        <h4 id="lancamento">2024</h4>
+                        <h4 id="nota">8.7</h4>
                     </div>
-                    <div id="estrelas">
-                        <i class="fa-solid fa-star estrela"></i>
-                        <i class="fa-solid fa-star estrela"></i>
-                        <i class="fa-solid fa-star estrela"></i>
-                        <i class="fa-solid fa-star-half-stroke estrela"></i>
-                        <i class="fa-regular fa-star estrela"></i>
+                    <div id="container_estrelas">
+
                     </div>
                 </div>
                 <h5 id="sinopse">
@@ -79,8 +79,8 @@
             </div>
         </div>
 
-        <div class="container-iframe">
-            <iframe id="iframe" src="https://www.youtube.com/embed/iS5xXr-GOnM?si=yGh4y-a0PaFXKcqg"
+        <div id="container_iframe">
+            <iframe id="iframe" src=""
                 title="YouTube video player" frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>

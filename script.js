@@ -393,8 +393,14 @@ const ptBr = '&language=pt-BR'
 let obj = {}
 let objTitle = ''
 let objNota = ''
+let objMedia = ''
 let objPP = ''
 let imgUrl = ''
+let objId = ''
+let objSinopse = ''
+let objLancamento = ''
+let videoUrl = ''
+let videoKey = ''
 
 if (containerGradeFilmes) {
     async function chamarFilmesAPI() {
@@ -408,25 +414,23 @@ if (containerGradeFilmes) {
                             objTitle = obj.results[i].title
                             objNota = obj.results[i].vote_average.toFixed(1)
                             objPP = obj.results[i].poster_path
+                            objId = obj.results[i].id
                             imgUrl = `https://image.tmdb.org/t/p/w500${objPP}`
 
                             function criarEstrutura() {
 
                                 const htmlCartaz = document.createElement('div')
                                 htmlCartaz.className = 'cartaz'
-
-                                const a = document.createElement('a')
-                                htmlCartaz.appendChild(a)
-                                a.href = 'detalhes.html'
+                                htmlCartaz.id = objId
 
                                 const htmlImg = document.createElement('img')
                                 htmlImg.className = 'img-cartaz'
                                 htmlImg.src = imgUrl
-                                a.appendChild(htmlImg)
+                                htmlCartaz.appendChild(htmlImg)
 
                                 const htmlDetalhesCartaz = document.createElement('div')
                                 htmlDetalhesCartaz.className = 'detalhes-cartaz'
-                                a.appendChild(htmlDetalhesCartaz)
+                                htmlCartaz.appendChild(htmlDetalhesCartaz)
 
                                 const htmlTitle = document.createElement('h2')
                                 htmlTitle.className = 'film-title'
@@ -446,6 +450,10 @@ if (containerGradeFilmes) {
                                 containerCartazes.appendChild(htmlCartaz)
                             }
                             criarEstrutura()
+                            loadScreen.classList.add('off')
+                            setTimeout(() => {
+                                loadScreen.classList.add('d-none')
+                            }, 600)
                         }
                     })
             }
@@ -476,6 +484,7 @@ if (containerGradeSeries) {
                                 objTitle = obj.results[i].name
                                 objNota = obj.results[i].vote_average.toFixed(1)
                                 objPP = obj.results[i].poster_path
+                                objId = obj.results[i].id
                                 imgUrl = `https://image.tmdb.org/t/p/w500${objPP}`
                                 contagemSeries++
 
@@ -483,19 +492,16 @@ if (containerGradeSeries) {
 
                                     const htmlCartaz = document.createElement('div')
                                     htmlCartaz.className = 'cartaz'
-
-                                    const a = document.createElement('a')
-                                    htmlCartaz.appendChild(a)
-                                    a.href = 'detalhes.html'
+                                    htmlCartaz.id = objId
 
                                     const htmlImg = document.createElement('img')
                                     htmlImg.className = 'img-cartaz'
                                     htmlImg.src = imgUrl
-                                    a.appendChild(htmlImg)
+                                    htmlCartaz.appendChild(htmlImg)
 
                                     const htmlDetalhesCartaz = document.createElement('div')
                                     htmlDetalhesCartaz.className = 'detalhes-cartaz'
-                                    a.appendChild(htmlDetalhesCartaz)
+                                    htmlCartaz.appendChild(htmlDetalhesCartaz)
 
                                     const htmlTitle = document.createElement('h2')
                                     htmlTitle.className = 'film-title'
@@ -515,6 +521,10 @@ if (containerGradeSeries) {
                                     containerCartazes.appendChild(htmlCartaz)
                                 }
                                 criarEstrutura()
+                                loadScreen.classList.add('off')
+                                setTimeout(() => {
+                                    loadScreen.classList.add('d-none')
+                                }, 600)
                             }
                         }
                     })
@@ -539,25 +549,23 @@ if (containerGradeIndicacoes) {
                             objTitle = obj.results[i].title
                             objNota = obj.results[i].vote_average.toFixed(1)
                             objPP = obj.results[i].poster_path
+                            objId = obj.results[i].id
                             imgUrl = `https://image.tmdb.org/t/p/w500${objPP}`
 
                             function criarEstrutura() {
 
                                 const htmlCartaz = document.createElement('div')
                                 htmlCartaz.className = 'cartaz'
-
-                                const a = document.createElement('a')
-                                htmlCartaz.appendChild(a)
-                                a.href = 'detalhes.html'
+                                htmlCartaz.id = objId
 
                                 const htmlImg = document.createElement('img')
                                 htmlImg.className = 'img-cartaz'
                                 htmlImg.src = imgUrl
-                                a.appendChild(htmlImg)
+                                htmlCartaz.appendChild(htmlImg)
 
                                 const htmlDetalhesCartaz = document.createElement('div')
                                 htmlDetalhesCartaz.className = 'detalhes-cartaz'
-                                a.appendChild(htmlDetalhesCartaz)
+                                htmlCartaz.appendChild(htmlDetalhesCartaz)
 
                                 const htmlTitle = document.createElement('h2')
                                 htmlTitle.className = 'film-title'
@@ -577,6 +585,10 @@ if (containerGradeIndicacoes) {
                                 containerCartazes.appendChild(htmlCartaz)
                             }
                             criarEstrutura()
+                            loadScreen.classList.add('off')
+                            setTimeout(() => {
+                                loadScreen.classList.add('d-none')
+                            }, 600)
                         }
                     })
             }
@@ -587,3 +599,229 @@ if (containerGradeIndicacoes) {
     }
     chamarindicacoesAPI()
 }
+
+async function detalhesFilmes() {
+    const containerCartazes = document.querySelector('.container-cartazes')
+
+    if (document.querySelector('#container-grade-filmes') || document.querySelector('#container-grade-indicacoes')) {
+        containerCartazes.addEventListener('click', (event) => {
+            const clickedElement = event.target.closest('.cartaz')
+            const idClicado = clickedElement ? clickedElement.id : null
+            if (idClicado) {
+                try {
+                    fetch(`https://api.themoviedb.org/3/movie/${idClicado}?api_key=${apiKey}${ptBr}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            obj = data
+                            objTitle = obj.title
+                            objLancamento = obj.release_date
+                            objNota = obj.vote_average.toFixed(1)
+                            objMedia = obj.vote_average.toFixed(1) / 2
+                            objSinopse = obj.overview
+                            objPP = obj.poster_path
+                            objId = obj.id
+                            imgUrl = `https://image.tmdb.org/t/p/w500${objPP}`
+                            videoUrl = `${urlApi}movie/${objId}/videos?api_key=${apiKey}${ptBr}`
+
+                            localStorage.setItem('titulo', objTitle)
+                            localStorage.setItem('Lancamento', objLancamento)
+                            localStorage.setItem('Nota', objNota)
+                            localStorage.setItem('media', objMedia)
+                            localStorage.setItem('Sinopse', objSinopse)
+                            localStorage.setItem('imgUrl', imgUrl)
+                            localStorage.setItem('videoUrl', videoUrl)
+
+                            window.location.href = 'detalhes.html'
+                        })
+                } catch (error) {
+                    console.error('Erro ao chamar a API: ', error)
+                }
+            }
+        })
+    }
+}
+detalhesFilmes()
+
+async function detalhesSeries() {
+    const containerCartazes = document.querySelector('.container-cartazes')
+
+    if (document.querySelector('#container-grade-series')) {
+        containerCartazes.addEventListener('click', (event) => {
+            const clickedElement = event.target.closest('.cartaz')
+            const idClicado = clickedElement ? clickedElement.id : null
+            if (idClicado) {
+                try {
+                    fetch(`https://api.themoviedb.org/3/tv/${idClicado}?api_key=${apiKey}${ptBr}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            obj = data
+                            objTitle = obj.name
+                            objLancamento = obj.first_air_date
+                            objNota = obj.vote_average.toFixed(1)
+                            objMedia = obj.vote_average.toFixed(1) / 2
+                            objSinopse = obj.overview
+                            objPP = obj.poster_path
+                            objId = obj.id
+                            imgUrl = `https://image.tmdb.org/t/p/w500${objPP}`
+                            videoUrl = `${urlApi}tv/${objId}/videos?api_key=${apiKey}${ptBr}`
+
+                            localStorage.setItem('titulo', objTitle)
+                            localStorage.setItem('Lancamento', objLancamento)
+                            localStorage.setItem('Nota', objNota)
+                            localStorage.setItem('media', objMedia)
+                            localStorage.setItem('Sinopse', objSinopse)
+                            localStorage.setItem('imgUrl', imgUrl)
+                            localStorage.setItem('videoUrl', videoUrl)
+
+                            window.location.href = 'detalhes.html'
+                        })
+                } catch (error) {
+                    console.error('Erro ao chamar a API: ', error)
+                }
+            }
+        })
+    }
+}
+detalhesSeries()
+
+function exibirDetalhes() {
+    const containerDetalhes = document.querySelector('.container-detalhes')
+    const imgHtml = document.querySelector('#img_detalhes')
+    const titleHtml = document.querySelector('#tittle_detalhes')
+    const lancamentoHtml = document.querySelector('#lancamento')
+    const notaHtml = document.querySelector('#nota')
+    const containerEstrelas = document.querySelector('#container_estrelas')
+    const sinopseHtml = document.querySelector('#sinopse')
+    const Iframe = document.querySelector('#iframe')
+
+    if (titleHtml) {
+        window.addEventListener('load', () => {
+            const title = localStorage.getItem('titulo')
+            const lancamento = localStorage.getItem('Lancamento')
+            const nota = localStorage.getItem('Nota')
+            const media = localStorage.getItem('media')
+            const sinopse = localStorage.getItem('Sinopse')
+            const imgUrl = localStorage.getItem('imgUrl')
+            const videoUrl = localStorage.getItem('videoUrl')
+
+            titleHtml.textContent = title
+            imgHtml.src = imgUrl
+            lancamentoHtml.textContent = lancamento.slice(0, 4)
+            notaHtml.textContent = nota
+            sinopseHtml.textContent = sinopse
+
+            if (title.length > 15 && title.length < 25) {
+                containerDetalhes.style.paddingTop = '220px'
+                titleHtml.style.top = '-440px'
+            } else if (title.length > 25) {
+                containerDetalhes.style.paddingTop = '300px'
+                titleHtml.style.top = '-530px'
+            }
+
+            function criarEstrela(tipo) {
+                let estrela = document.createElement('i')
+                estrela.className = tipo
+                return estrela
+            }
+
+            converterEstrela(media)
+
+            function converterEstrela(media) {
+
+                if (media >= 4.8 && media <= 5) {
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                } else if (media >= 4.3 && media < 4.8) {
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star-half-stroke estrela'))
+                } else if (media >= 3.8 && media < 4.3) {
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                } else if (media >= 3.3 && media < 3.8) {
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star-half-stroke estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                } else if (media >= 2.8 && media < 3.3) {
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                } else if (media >= 2.3 && media < 3.8) {
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star-half-stroke estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                } else if (media >= 1.8 && media < 2.3) {
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                } else if (media >= 1.3 && media < 1.8) {
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star-half-stroke estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                } else if (media >= 0.8 && media < 1.3) {
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                } else if (media >= 0.3 && media < 0.8) {
+                    containerEstrelas.appendChild(criarEstrela('fa-solid fa-star-half-stroke estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                } else {
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                    containerEstrelas.appendChild(criarEstrela('fa-regular fa-star estrela'))
+                }
+            }
+
+            fetch(videoUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.results.length > 0) {
+                        videoKey = data.results[0].key
+                        Iframe.src = `https://www.youtube.com/embed/${videoKey}`
+                    } else {
+                        const notBrUrl = `${urlApi}movie/${objId}/videos?api_key=${apiKey}`
+                        fetch(notBrUrl)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.results.length > 0) {
+                                    videoKey = data.results[0].key
+                                    Iframe.src = `https://www.youtube.com/embed/${videoKey}`
+                                } else {
+                                    console.log(`Nenhum trailer encontrado para o filme ${title}.`)
+                                }
+                            })
+                    }
+                })
+            loadScreen.classList.add('off')
+            setTimeout(() => {
+                loadScreen.classList.add('d-none')
+            }, 600)
+        })
+    }
+}
+exibirDetalhes()
