@@ -620,10 +620,20 @@ p {
     font-size: 1.1rem;
 }
 
+#container_geral {
+    width: 85vw;
+    margin: 0 auto;
+}
+
 #container_iframe {
     padding: 80px 0;
     display: flex;
+    align-items: center;
     justify-content: center;
+}
+
+#msg_erro {
+    text-align: center;
 }
 
 #iframe {
@@ -631,11 +641,6 @@ p {
     max-width: 800px;
     aspect-ratio: 16 / 9;
     border-radius: 25px;
-}
-
-#container_geral {
-    width: 85vw;
-    margin: 0 auto;
 }
 
 

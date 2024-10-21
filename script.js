@@ -374,9 +374,122 @@ if (banner) {
         wrapper3.addEventListener("mouseleave", autoPlay)
     }
 
-    setupCarousel1(wrapper1, carousel1, firstCardWidth1, arrowBtns1)
-    setupCarousel2(wrapper2, carousel2, firstCardWidth2, arrowBtns2)
-    setupCarousel3(wrapper3, carousel3, firstCardWidth3, arrowBtns3)
+    const urlApi = 'https://api.themoviedb.org/3/'
+    const apiKey = '062d176f3e0565c0e81c67fb76be2bb9'
+    const ptBr = '&language=pt-BR'
+    let obj = {}
+    let objTitle1 = []
+    let objPP1 = []
+    let objTitle2 = []
+    let objPP2 = []
+    let objTitle3 = []
+    let objPP3 = []
+    let imgUrl = ''
+    const carrossel1 = document.querySelector('.carousel1')
+    const carrossel2 = document.querySelector('.carousel2')
+    const carrossel3 = document.querySelector('.carousel3')
+    carrossel1.innerHTML = ''
+    carrossel2.innerHTML = ''
+    carrossel3.innerHTML = ''
+
+    async function cartazCarousel1() {
+        try {
+            fetch(`${urlApi}movie/upcoming?api_key=${apiKey}${ptBr}`)
+                .then(response => response.json())
+                .then(data => {
+                    obj = data
+                    for (let i = 0; i < 8; i++) {
+                        objTitle1.push(obj.results[i].title)
+                        objPP1.push(obj.results[i].poster_path)
+                        imgUrl = `https://image.tmdb.org/t/p/w500${objPP1[i]}`
+
+                        const liElement = document.createElement('li')
+                        liElement.classList.add('card-carousel')
+                        const imgElement = document.createElement('img')
+                        imgElement.classList.add('img-cartaz')
+                        imgElement.src = imgUrl
+                        imgElement.draggable = false
+
+                        liElement.appendChild(imgElement)
+                        carrossel1.appendChild(liElement)
+
+                    }
+                    setupCarousel1(wrapper1, carousel1, firstCardWidth1, arrowBtns1)
+                    console.log(objTitle1, objPP1)
+                })
+        }
+        catch (error) {
+            console.error("Erro ao chamar a API:", error);
+        }
+    }
+
+    cartazCarousel1()
+
+    async function cartazCarousel2() {
+        try {
+            fetch(`${urlApi}movie/popular?api_key=${apiKey}${ptBr}`)
+                .then(response => response.json())
+                .then(data => {
+                    obj = data
+                    for (let i = 0; i < 8; i++) {
+                        objTitle2.push(obj.results[i].title)
+                        objPP2.push(obj.results[i].poster_path)
+                        imgUrl = `https://image.tmdb.org/t/p/w500${objPP2[i]}`
+
+                        const liElement = document.createElement('li')
+                        liElement.classList.add('card-carousel')
+                        const imgElement = document.createElement('img')
+                        imgElement.classList.add('img-cartaz')
+                        imgElement.src = imgUrl
+                        imgElement.draggable = false
+
+                        liElement.appendChild(imgElement)
+                        carrossel2.appendChild(liElement)
+
+                    }
+                    setupCarousel2(wrapper2, carousel2, firstCardWidth2, arrowBtns2)
+                    console.log(objTitle2, objPP2)
+                })
+        }
+        catch (error) {
+            console.error("Erro ao chamar a API:", error);
+        }
+    }
+
+    cartazCarousel2()
+
+    async function cartazCarousel3() {
+        try {
+            fetch(`${urlApi}tv/popular?api_key=${apiKey}${ptBr}&page=3`)
+                .then(response => response.json())
+                .then(data => {
+                    obj = data
+                    for (let i = 0; i < 8; i++) {
+                        objTitle3.push(obj.results[i].title)
+                        objPP3.push(obj.results[i].poster_path)
+                        imgUrl = `https://image.tmdb.org/t/p/w500${objPP3[i]}`
+
+                        const liElement = document.createElement('li')
+                        liElement.classList.add('card-carousel')
+                        const imgElement = document.createElement('img')
+                        imgElement.classList.add('img-cartaz')
+                        imgElement.src = imgUrl
+                        imgElement.draggable = false
+
+                        liElement.appendChild(imgElement)
+                        carrossel3.appendChild(liElement)
+
+                    }
+                    setupCarousel3(wrapper3, carousel3, firstCardWidth3, arrowBtns3)
+                    console.log(objTitle3, objPP3)
+                })
+        }
+        catch (error) {
+            console.error("Erro ao chamar a API:", error);
+        }
+    }
+
+    cartazCarousel3()
 }
 
 // ---------------------
@@ -628,6 +741,7 @@ async function detalhesFilmes() {
                             localStorage.setItem('Nota', objNota)
                             localStorage.setItem('media', objMedia)
                             localStorage.setItem('Sinopse', objSinopse)
+                            localStorage.setItem('id', objId)
                             localStorage.setItem('imgUrl', imgUrl)
                             localStorage.setItem('videoUrl', videoUrl)
 
@@ -670,6 +784,7 @@ async function detalhesSeries() {
                             localStorage.setItem('Nota', objNota)
                             localStorage.setItem('media', objMedia)
                             localStorage.setItem('Sinopse', objSinopse)
+                            localStorage.setItem('id', objId)
                             localStorage.setItem('imgUrl', imgUrl)
                             localStorage.setItem('videoUrl', videoUrl)
 
@@ -701,6 +816,7 @@ function exibirDetalhes() {
             const nota = localStorage.getItem('Nota')
             const media = localStorage.getItem('media')
             const sinopse = localStorage.getItem('Sinopse')
+            const id = localStorage.getItem('id')
             const imgUrl = localStorage.getItem('imgUrl')
             const videoUrl = localStorage.getItem('videoUrl')
 
@@ -708,14 +824,24 @@ function exibirDetalhes() {
             imgHtml.src = imgUrl
             lancamentoHtml.textContent = lancamento.slice(0, 4)
             notaHtml.textContent = nota
-            sinopseHtml.textContent = sinopse
 
-            if (title.length > 15 && title.length < 25) {
-                containerDetalhes.style.paddingTop = '220px'
-                titleHtml.style.top = '-440px'
-            } else if (title.length > 25) {
-                containerDetalhes.style.paddingTop = '300px'
-                titleHtml.style.top = '-530px'
+            if (sinopse == '') {
+                sinopseHtml.textContent = 'Não foi possível encontrar a sinopse para este filme'
+            } else {
+                sinopseHtml.textContent = sinopse
+            }
+
+            if (window.innerWidth <= 768) {
+                if (title.length > 15 && title.length < 25) {
+                    containerDetalhes.style.paddingTop = '220px'
+                    titleHtml.style.top = '-440px'
+                } else if (title.length > 25) {
+                    containerDetalhes.style.paddingTop = '300px'
+                    titleHtml.style.top = '-530px'
+                }
+            } else {
+                containerDetalhes.style.paddingTop = '141px'
+                titleHtml.style.top = '-380px'
             }
 
             function criarEstrela(tipo) {
@@ -804,7 +930,7 @@ function exibirDetalhes() {
                         videoKey = data.results[0].key
                         Iframe.src = `https://www.youtube.com/embed/${videoKey}`
                     } else {
-                        const notBrUrl = `${urlApi}movie/${objId}/videos?api_key=${apiKey}`
+                        const notBrUrl = `${urlApi}movie/${id}/videos?api_key=${apiKey}`
                         fetch(notBrUrl)
                             .then(response => response.json())
                             .then(data => {
@@ -812,7 +938,9 @@ function exibirDetalhes() {
                                     videoKey = data.results[0].key
                                     Iframe.src = `https://www.youtube.com/embed/${videoKey}`
                                 } else {
-                                    console.log(`Nenhum trailer encontrado para o filme ${title}.`)
+                                    const msgErro = document.querySelector('#msg_erro')
+                                    msgErro.innerHTML = 'Não foi possível encontrar nenhum trailer para este filme'
+                                    Iframe.remove()
                                 }
                             })
                     }
